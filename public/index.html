@@ -3,42 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vienna Transit Travel Times</title>
+  <title>Running Cocktails</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
-      <h1>Vienna Transit</h1>
-      <p class="subtitle">Add locations to compare travel times</p>
 
-      <div class="search-section">
-        <div class="search-wrap">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search for an address in Vienna..."
-            autocomplete="off"
-          />
-          <ul id="searchDropdown" class="dropdown hidden"></ul>
+      <!-- ── SETUP PHASE ── -->
+      <div id="phase-setup">
+        <h1>Running Cocktails</h1>
+        <p class="subtitle">WU SCM Board event planner</p>
+
+        <section class="section">
+          <h2>Event Config</h2>
+          <div class="config-grid">
+            <label class="config-label">
+              <span>Rounds</span>
+              <input type="number" id="numRounds" value="4" min="2" max="10">
+            </label>
+            <label class="config-label">
+              <span>Max guests / host</span>
+              <input type="number" id="maxGuests" value="3" min="1" max="9">
+            </label>
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">Final meetup location</span>
+            <div class="search-wrap">
+              <input type="text" id="goalInput" placeholder="Search address in Vienna..." autocomplete="off">
+              <ul id="goalDropdown" class="dropdown hidden"></ul>
+            </div>
+            <div id="goalSelected" class="selected-tag hidden"></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <h2>Participants <span id="participantCount" class="count"></span></h2>
+            <div class="section-actions">
+              <button id="importBtn" class="btn-sm">Import</button>
+              <button id="exportParticipantsBtn" class="btn-sm">Export</button>
+            </div>
+          </div>
+          <input type="file" id="importFile" accept=".csv" class="hidden">
+          <div class="add-participant">
+            <input type="text" id="participantName" placeholder="Name" class="name-input" autocomplete="off">
+            <div class="search-wrap">
+              <input type="text" id="participantAddr" placeholder="Address in Vienna..." autocomplete="off">
+              <ul id="addrDropdown" class="dropdown hidden"></ul>
+            </div>
+            <button id="pinBtn" class="btn-pin" title="Click on the map to pin a location">+ Pin on map</button>
+          </div>
+          <ul id="participantsList" class="items-list">
+            <li class="empty-hint">Add participants to get started.</li>
+          </ul>
+        </section>
+
+        <div class="action-section">
+          <div id="setupError" class="error-msg hidden"></div>
+          <button id="calculateBtn" class="btn-primary">Calculate Routes</button>
         </div>
-        <button id="pinBtn" class="btn-pin" title="Click on the map to pin a custom location">
-          + Pin on map
-        </button>
       </div>
 
-      <div class="locations-section">
-        <h2>Locations <span id="locationCount" class="count"></span></h2>
-        <ul id="locationsList" class="locations-list">
-          <li class="empty-hint">Add at least two locations to compare travel times.</li>
-        </ul>
+      <!-- ── LOADING PHASE ── -->
+      <div id="phase-loading" class="hidden">
+        <h1>Running Cocktails</h1>
+        <div class="loading-content">
+          <div class="spinner"></div>
+          <p id="loadingMsg">Calculating transit times…</p>
+          <p class="loading-hint">This may take a minute for large groups.</p>
+        </div>
       </div>
 
-      <div class="results-section" id="resultsSection" style="display:none">
-        <h2>Travel times from <span id="originName" class="origin-name"></span></h2>
-        <ul id="resultsList" class="results-list"></ul>
+      <!-- ── RESULTS PHASE ── -->
+      <div id="phase-results" class="hidden">
+        <div class="results-header">
+          <h1>Running Cocktails</h1>
+          <button id="backBtn" class="btn-back">← New Event</button>
+        </div>
+
+        <div id="violationBanner" class="violation-banner"></div>
+
+        <div class="results-toolbar">
+          <div class="view-toggle">
+            <button id="viewTable" class="toggle-btn active">Schedule</button>
+            <button id="viewJourney" class="toggle-btn">Journeys</button>
+          </div>
+          <button id="exportScheduleBtn" class="btn-sm">Export</button>
+        </div>
+
+        <!-- Schedule view -->
+        <div id="table-view">
+          <div id="roundTabs" class="round-tabs"></div>
+          <div id="groupCards" class="group-cards"></div>
+        </div>
+
+        <!-- Journey view -->
+        <div id="journey-view" class="hidden">
+          <ul id="journeyList" class="items-list journey-participant-list"></ul>
+          <div id="journeyDetail" class="journey-detail hidden"></div>
+        </div>
       </div>
+
     </aside>
 
     <main class="map-container">
