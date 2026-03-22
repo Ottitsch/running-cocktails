@@ -10,10 +10,10 @@ const NOMINATIM = 'https://nominatim.openstreetmap.org';
 app.use(express.json());
 app.use(express.static('public'));
 
-function httpsGet(url) {
+function httpsGet(url, timeoutMs = 10000) {
   const opts = new URL(url);
   return new Promise((resolve, reject) => {
-    https.get({
+    const req = https.get({
       hostname: opts.hostname,
       path: opts.pathname + opts.search,
       headers: { 'User-Agent': 'running-cocktails-app/1.0' }
@@ -27,7 +27,11 @@ function httpsGet(url) {
           reject(new Error(`Failed to parse response: ${data.slice(0, 200)}`));
         }
       });
-    }).on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(timeoutMs, () => {
+      req.destroy(new Error(`Request timed out after ${timeoutMs}ms`));
+    });
   });
 }
 
