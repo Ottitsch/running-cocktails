@@ -6,6 +6,12 @@ Instead of scheduling groups by hand, the app automatically generates an optimis
 
 ---
 
+
+https://github.com/user-attachments/assets/c75459bd-c034-4cf1-94e4-8ad039e4ba1a
+
+
+---
+
 ## Game Rules
 
 | Rule | Details |
