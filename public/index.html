@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vienna Transit Travel Times</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h1>Vienna Transit</h1>
+      <p class="subtitle">Add locations to compare travel times</p>
+
+      <div class="search-section">
+        <div class="search-wrap">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for an address in Vienna..."
+            autocomplete="off"
+          />
+          <ul id="searchDropdown" class="dropdown hidden"></ul>
+        </div>
+        <button id="pinBtn" class="btn-pin" title="Click on the map to pin a custom location">
+          + Pin on map
+        </button>
+      </div>
+
+      <div class="locations-section">
+        <h2>Locations <span id="locationCount" class="count"></span></h2>
+        <ul id="locationsList" class="locations-list">
+          <li class="empty-hint">Add at least two locations to compare travel times.</li>
+        </ul>
+      </div>
+
+      <div class="results-section" id="resultsSection" style="display:none">
+        <h2>Travel times from <span id="originName" class="origin-name"></span></h2>
+        <ul id="resultsList" class="results-list"></ul>
+      </div>
+    </aside>
+
+    <main class="map-container">
+      <div id="map"></div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
